@@ -3,7 +3,7 @@ Dev-Themer
 
 A Wordpress plugin for developers. Switch to an alternate theme when logged in. Useful when making theme changes to a live site, simply duplicate the main theme and use this plugin to only show the duplicate theme to administrators.
 
-####Steps to install:
+####Steps to set up:
 
 1. Download master
 2. Inzip and upload to the plugins folder of a Wordpress installation
