@@ -3,7 +3,7 @@ Dev-Themer
 
 A Wordpress plugin for developers. Switches to alternate theme when logged in.
 
-##Steps to install:
+####Steps to install:
 
 1. Download master
 2. Inzip and upload to the plugins folder of a Wordpress installation
