@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Dev Themer
+ * Plugin Name: Themer
  * Plugin URI:  http://funkhaus.us/
- * Description: Switch to a dev theme when administrator is logged in
- * Version:     1.0
+ * Description: Switch to an alternate theme for admins and/or mobile users
+ * Version:     1.1
  * Author:      John Robson, Funkhaus
  * Author URI:  http://funkhaus.us
  */
@@ -95,7 +95,7 @@ function devt_switch_theme( $template = '' ) {
 	add_action('admin_init', 'devt_settings_init');
 
 	function devt_add_settings() {
-		add_submenu_page( 'tools.php', 'Dev Themer', 'Dev Themer', 'manage_options', 'devt_settings', 'devt_settings_page' );
+		add_submenu_page( 'tools.php', 'Themer', 'Themer', 'manage_options', 'devt_settings', 'devt_settings_page' );
 	}
 
 	add_action('admin_menu','devt_add_settings');
