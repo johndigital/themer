@@ -10,56 +10,68 @@
 
 ! defined( 'ABSPATH' ) and exit;
 
-add_filter( 'template', 'devt_switch_theme' );
-add_filter( 'stylesheet', 'devt_switch_theme' ); // only WP 3* and below
-add_filter( 'option_template', 'devt_switch_theme' );
-add_filter( 'option_stylesheet', 'devt_switch_theme' );
+add_filter( 'template', 'themer_switch_theme' );
+add_filter( 'stylesheet', 'themer_switch_theme' ); // only WP 3* and below
+add_filter( 'option_template', 'themer_switch_theme' );
+add_filter( 'option_stylesheet', 'themer_switch_theme' );
 
-function devt_switch_theme( $template = '' ) {
 
-	// Get all themes
-	$themes = wp_get_themes();
 
-	// Check if user is administrator, set template if so
-	if ( current_user_can( 'manage_options' ) ) {
-		$selected = get_option('devt_admin_theme');
-		if ( isset($themes[$selected]) ) {
-			$template = $selected;
+/*
+ * Code that actually handles the switch of the theme
+ */
+	function themer_switch_theme( $template = '' ) {
+	
+		// Get all themes
+		$themes = wp_get_themes();
+	
+		// Check if user is administrator, set template if so
+		if ( current_user_can( 'manage_options' ) ) {
+			$selected = get_option('themer_admin_theme');
+			if ( isset($themes[$selected]) ) {
+				$template = $selected;
+			}
+		} elseif ( wp_is_mobile() ) {
+			$selected = get_option('themer_mobile_theme');
+			if ( isset($themes[$selected]) ) {
+				$template = $selected;
+			}
 		}
-	} elseif ( wp_is_mobile() ) {
-		$selected = get_option('devt_mobile_theme');
-		if ( isset($themes[$selected]) ) {
-			$template = $selected;
-		}
+	
+		return $template;
 	}
-
-	return $template;
-}
 
 
 /*
  * Create settings page for plugin.
  */
-
-	/* Call Settings Page */
-	function devt_settings_page() { ?>
+	function themer_settings_page() 
+	{
+		?>
 
 		<div class="wrap">
-			<h2>Dev Themer Options</h2>
-			<form action="options.php" method="post" id="devt_settings">
-				<?php settings_fields('devt_settings'); ?>
-				<?php $themes = wp_get_themes(); ?>
-				<?php $current_theme = wp_get_theme(); ?>
+			<h2>Themer Options</h2>
+			<form action="options.php" method="post" id="themer_settings">
+				<?php 
+					// Output settings field
+					settings_fields('themer_settings');
+					
+					// Get themes
+					$themes = wp_get_themes();
+					$current_theme = wp_get_theme();
+				?>
 				<table class="form-table">
 					<tbody>
 						<tr valign="top">
 							<th scope="row"><label>Admins users will see:</label></th>
 							<td>
-								<select name="devt_admin_theme" id="devt_admin_theme">
-									<option value="0" <?php if ( ! get_option('devt_admin_theme')) echo 'selected'; ?>>Default Theme</option>
+								<select name="themer_admin_theme" id="themer_admin_theme">
+									<option value="0" <?php if ( ! get_option('themer_admin_theme')) echo 'selected'; ?>>Default Theme</option>
+									
 									<?php foreach ( $themes as $slug => $theme ) : ?>
-										<option value="<?php echo $slug; ?>" <?php selected( get_option('devt_admin_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
+										<option value="<?php echo $slug; ?>" <?php selected( get_option('themer_admin_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
 									<?php endforeach; ?>
+									
 								</select>
 							</td>
 
@@ -67,11 +79,13 @@ function devt_switch_theme( $template = '' ) {
 						<tr valign="top">
 							<th scope="row"><label>Mobile users will see:</label></th>
 							<td>
-								<select name="devt_mobile_theme" id="devt_mobile_theme">
-									<option value="0" <?php if ( ! get_option('devt_mobile_theme')) echo 'selected'; ?>>Default Theme</option>
+								<select name="themer_mobile_theme" id="themer_mobile_theme">
+									<option value="0" <?php if ( ! get_option('themer_mobile_theme')) echo 'selected'; ?>>Default Theme</option>
+									
 									<?php foreach ( $themes as $slug => $theme ) : ?>
-										<option value="<?php echo $slug; ?>" <?php selected( get_option('devt_mobile_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
+										<option value="<?php echo $slug; ?>" <?php selected( get_option('themer_mobile_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
 									<?php endforeach; ?>
+									
 								</select>
 							</td>
 							
@@ -87,17 +101,19 @@ function devt_switch_theme( $template = '' ) {
 		<?php
 	}
 
-	/* Save Takeover Settings */
-	function devt_settings_init(){
-		register_setting('devt_settings', 'devt_admin_theme');
-		register_setting('devt_settings', 'devt_mobile_theme');
+/* 
+ * Save Takeover Settings 
+ */
+ 	/* Register new settings */
+	function themer_settings_init(){
+		register_setting('themer_settings', 'themer_admin_theme');
+		register_setting('themer_settings', 'themer_mobile_theme');
 	}
-	add_action('admin_init', 'devt_settings_init');
+	add_action('admin_init', 'themer_settings_init');
 
-	function devt_add_settings() {
-		add_submenu_page( 'tools.php', 'Themer', 'Themer', 'manage_options', 'devt_settings', 'devt_settings_page' );
+ 	/* Add to menu */
+	function themer_add_settings() {
+		add_submenu_page( 'tools.php', 'Themer', 'Themer', 'manage_options', 'themer_settings', 'themer_settings_page' );
 	}
-
-	add_action('admin_menu','devt_add_settings');
-
+	add_action('admin_menu','themer_add_settings');
 ?>
