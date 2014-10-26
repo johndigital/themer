@@ -66,7 +66,7 @@ add_filter( 'option_stylesheet', 'themer_switch_theme' );
 							<th scope="row"><label>Admins users will see:</label></th>
 							<td>
 								<select name="themer_admin_theme" id="themer_admin_theme">
-									<option value="0" <?php if ( ! get_option('themer_admin_theme')) echo 'selected'; ?>>Default Theme</option>
+									<option value="0" <?php selected( get_option('themer_admin_theme'), false); ?>>Default Theme</option>
 									
 									<?php foreach ( $themes as $slug => $theme ) : ?>
 										<option value="<?php echo $slug; ?>" <?php selected( get_option('themer_admin_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
@@ -80,10 +80,10 @@ add_filter( 'option_stylesheet', 'themer_switch_theme' );
 							<th scope="row"><label>Mobile users will see:</label></th>
 							<td>
 								<select name="themer_mobile_theme" id="themer_mobile_theme">
-									<option value="0" <?php if ( ! get_option('themer_mobile_theme')) echo 'selected'; ?>>Default Theme</option>
+									<option value="0" <?php selected( get_option('themer_mobile_theme'), false); ?>>Default Theme</option>
 									
 									<?php foreach ( $themes as $slug => $theme ) : ?>
-										<option value="<?php echo $slug; ?>" <?php selected( get_option('themer_mobile_theme'), $slug ); ?>><?php echo $theme->get( 'Name' ); ?></option>
+										<option value="<?php echo $slug; ?>" <?php selected( get_option('themer_mobile_theme'), $slug); ?>><?php echo $theme->get( 'Name' ); ?></option>
 									<?php endforeach; ?>
 									
 								</select>
